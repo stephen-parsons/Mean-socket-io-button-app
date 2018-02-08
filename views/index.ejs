@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Button App</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document).ready(function (){
+        var socket  = io.connect();
+        $('#button').click(function (){
+        	console.log('Button pushed!')
+            socket.emit("button_clicked", {thiscounter: count});
+        });
+        $('#reset').click(function (){
+            console.log('Reset pushed!')
+            socket.emit("reset_clicked", {thiscounter: 0});
+        });
+        socket.on('server_response', function (data){
+            console.log(data.response);
+            $('#counter').html("The button has been pushed "+data.response+" times!");
+            count=data.response;
+        });
+    });
+    </script>
+</head>
+<body>
+	<h3 id="counter"></h3>
+	<p>Push the button to update the count! Reset to reset it!</p>
+	<button id="button">Push!</button>
+    <button id="reset">Reset!</button>
+</body>
+</html>
